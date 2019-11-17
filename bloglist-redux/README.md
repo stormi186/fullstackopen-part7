@@ -47,7 +47,3 @@ Developer has spend more than an hour on styling the app
 ### 7.15: ESLint
 
 Frontend uses ESLint
-
-### 7.16: Webpack
-
-Frontend uses webpack
