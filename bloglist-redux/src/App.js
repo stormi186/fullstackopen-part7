@@ -11,13 +11,13 @@ import Blogs from './components/Blogs'
 import Blog from './components/Blog'
 import Users from './components/Users'
 import User from './components/User'
-import blogService from './services/blogs'
 import { initializeBlogs } from './reducers/blogReducer'
 import { setNotification } from './reducers/notificationReducer'
 import { likeThe } from './reducers/blogReducer'
 import { setUser, removeUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/userListReducer'
 import { createComment } from './reducers/commentReducer'
+import { Nav, Navbar } from 'react-bootstrap'
 
 const loggedInHeader = ({ props }) => {
   const padding = { padding: 5 }
@@ -36,19 +36,33 @@ const loggedInHeader = ({ props }) => {
     window.location.reload(false)
   }
   return(
-    <div>
+    <div className="container">
       <Notification />
       <Router>
         <div>
-          <div>
-            <Link style={padding} to="/blogs">blogs</Link>
-            <Link style={padding} to="/users">users</Link>
-            {props.user
-              ? <p><em>{props.user.name} logged in</em><button type="submit" onClick={handleLogout}>logout</button></p>
-              : <Link to="/login">login</Link>
-            }
-            <h2>blog app</h2>
-          </div>
+          <h1>Blog app</h1>
+          <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav className="mr-auto">
+                <Nav.Link href="#" as="span">
+                  <Link style={padding} to="/">home</Link>
+                </Nav.Link>
+                <Nav.Link href="#" as="span">
+                  <Link style={padding} to="/blogs">blogs</Link>
+                </Nav.Link>
+                <Nav.Link href="#" as="span">
+                  <Link style={padding} to="/users">users</Link>
+                </Nav.Link>
+                <Nav.Link href="#" as="span">
+                  {props.user
+                    ? <em onClick={handleLogout}>{props.user.name} logout</em>
+                    : <Link to="/login">login</Link>
+                  }
+                </Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
           <div>
             <Switch>
               <Route exact path="/" render={() => <Blogs />} />
@@ -79,24 +93,14 @@ const App = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      props.setUser(user)
-      blogService.setToken(user.token)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   const loginForm = () => (
     <LoginForm />
   )
 
   return (
     <div>
-      {window.localStorage.getItem('loggedBlogAppUser') === null && loginForm()}
-      {window.localStorage.getItem('loggedBlogAppUser') !== null && loggedInHeader({ props })}
+      {props.user === '' && loginForm()}
+      {props.user !== '' && loggedInHeader({ props })}
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { likeThe } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { createComment } from '../reducers/commentReducer'
 import { connect } from 'react-redux'
+import { Button } from 'react-bootstrap'
 
 const Blog = ({ blog, props }) => {
   const CommentForm = () => {
@@ -21,7 +22,7 @@ const Blog = ({ blog, props }) => {
         <form onSubmit={addComment}>
           <div>
             <input name='content' required />
-            <button type='submit'>add comment</button>
+            <Button variant='secondary' type='submit'>add comment</Button>
           </div>
         </form>
       </div>
@@ -41,12 +42,12 @@ const Blog = ({ blog, props }) => {
     <div>
       <h2>{blog[0].title} by {blog[0].author}</h2>
       <p><a href={blog[0].url}>{blog[0].url}</a></p>
-      <p>{blog[0].likes} likes <button onClick={() => like(blog[0].id)}>like</button></p>
+      <p>{blog[0].likes} likes <Button variant='primary' onClick={() => like(blog[0].id)}>like</Button></p>
       <p>added by {blog[0].user.name}</p>
       <h3>comments</h3>
       <CommentForm />
       {blog[0].comments.map(comment =>
-        <li key={comment.content}>{comment.content}</li>
+        <li key={comment.id}>{comment.content}</li>
       )}
     </div>
   )}

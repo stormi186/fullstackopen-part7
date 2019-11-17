@@ -1,14 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Alert } from 'react-bootstrap'
 
 const Notification = (props) => {
-  const style = {
-    padding: 10
-  }
 
   return (
-    <div style={style}>
-      {props.notification}
+    <div className="container">
+      <Alert>
+        {props.notification}
+      </Alert>
     </div>
   )
 }

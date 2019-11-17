@@ -4,6 +4,8 @@ import { setUser } from '../reducers/userReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import loginService from './../services/login'
 import blogService from './../services/blogs'
+import { Form, Button } from 'react-bootstrap'
+import { initializeUsers } from '.././reducers/userListReducer'
 
 const LoginForm = (props) => {
   const handleLogin = async (event) => {
@@ -13,12 +15,9 @@ const LoginForm = (props) => {
         username: event.target.username.value,
         password: event.target.password.value
       })
-      window.localStorage.setItem(
-        'loggedBlogAppUser', JSON.stringify(user)
-      )
       blogService.setToken(user.token)
-      props.setUser(user)
       props.setNotification('successful login', 5)
+      props.setUser(user)
     } catch (exception) {
       props.setNotification('wrong username and/or password', 5)
       event.target.username.value = ''
@@ -27,31 +26,34 @@ const LoginForm = (props) => {
   }
 
   return (
-    <div>
-      <form onSubmit={handleLogin} className="login">
+    <div className='container'>
+      <Form onSubmit={handleLogin} className='login'>
         <h1>log in to application</h1>
-        <div>
-          username
-          <input name='username' required />
-        </div>
-        <div>
-          password
-          <input name='password' type='password' required />
-        </div>
-        <div>
-          <button type='submit'>login</button>
-        </div>
-      </form>
+        <Form.Group>
+          <Form.Label>username</Form.Label>
+          <Form.Control type='text' name='username' required />
+          <Form.Label>password</Form.Label>
+          <Form.Control name='password' type='password' required />
+          <Button variant='primary' type='submit'>login</Button>
+        </Form.Group>
+      </Form>
     </div>
   )
 }
 
+const mapStateToProps = (state) => {
+  return {
+    user: state.user
+  }
+}
+
 const mapDispatchToProps = {
   setUser,
-  setNotification
+  setNotification,
+  initializeUsers
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(LoginForm)

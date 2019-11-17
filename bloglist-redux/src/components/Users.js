@@ -1,43 +1,43 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { Table } from 'react-bootstrap'
 
 const Users = (props) => {
-  if (props.userList.token !== undefined) return null
+  if (props.userList === undefined) return null
 
   return(
-    <div>
-      {props.userList.map(user =>
-        <div key={user.id}>
-          <div>
-            <table>
-              <tbody>
-                <tr>
-                  <th>Name</th>
-                  <th>Blogs created</th>
-                </tr>
-                <tr>
-                  <th><Link to={`/users/${user.id}`}><p>{user.name}</p></Link></th>
-                  <th>{user.blogs.length}</th>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+    <div className="container">
+      <Table striped>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Blogs created</th>
+          </tr>
+        </thead>
+        <tbody>
+          {props.userList.map(user =>
+            <tr key={user.id}>
+              <td><Link to={`/users/${user.id}`}><p>{user.name}</p></Link></td>
+              <td>{user.blogs.length}</td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </div>
   )
 }
 
 const mapStateToProps = (state) => {
   return {
-    userList: state.userList
+    userList: state.userList,
+    user: state.user
   }
 }
 
-const ConnectedUsers = connect(
+const ConnectedUserList = connect(
   mapStateToProps,
   null
 )(Users)
 
-export default ConnectedUsers
+export default ConnectedUserList
